@@ -1,0 +1,137 @@
+snippet ModInt
+template<const int MOD>
+struct ModInt
+{
+	long long x;
+	ModInt() : x(0) { }
+	//ModInt(long long u) : x(u) { if (x >= MOD || x < 0) { x %= MOD; if (x < 0) x += MOD; } } 
+	ModInt(long long u) : x(u) { }
+	ModInt(const ModInt &m) : x(m.x) { }
+	ModInt& operator=(const ModInt &m) { x = m.x; return *this; }
+	friend bool operator==(const ModInt& a, const ModInt& b) { return a.x == b.x; }
+	friend bool operator!=(const ModInt& a, const ModInt& b) { return a.x != b.x; }
+	friend bool operator<(const ModInt& a, const ModInt& b) { return a.x < b.x; }
+
+	ModInt& operator+=(const ModInt& m) { x += m.x; if (x >= MOD) x -= MOD; return *this; }
+	ModInt& operator-=(const ModInt& m) { x -= m.x; if (x < 0) x += MOD; return *this; }
+	ModInt& operator*=(const ModInt& m) { x = (x*m.x)%MOD; return *this; }	
+
+	friend ModInt operator-(const ModInt &a) { ModInt res(a); if (res.x) res.x = MOD-res.x; return res; }
+	friend ModInt operator+(const ModInt& a, const ModInt &b) { return ModInt(a) += ModInt(b); }
+	friend ModInt operator-(const ModInt& a, const ModInt &b) { return ModInt(a) -= ModInt(b); }
+	friend ModInt operator*(const ModInt& a, const ModInt &b) { return ModInt(a) *= ModInt(b); }
+
+	static long long fp(long long u, int k) {
+		if (k == 0) return 1;
+		long long res = fp(u, k/2);
+		res = (res*res) % MOD;
+		if (k & 1) res = (res*u) % MOD;
+		return res;
+	}
+
+	ModInt fastpow(int k) { return ModInt(fp(x, k)); }
+	ModInt inv() { return ModInt(fp(x, MOD-2)); }
+};
+
+$0
+endsnippet
+
+snippet m197
+const int m197 = (int)(1e9) + 7;
+using Num = ModInt<m197>;
+
+$0
+endsnippet
+
+snippet m998
+const int m998 = 998244353;
+using Num = ModInt<m998>;
+
+$0
+endsnippet
+
+snippet ModPair
+template<const int MOD>
+struct ModInt {
+	long long x;
+	ModInt() : x(0) { }
+	//ModInt(long long u) : x(u) { if (x >= MOD || x < 0) { x %= MOD; if (x < 0) x += MOD; } } 
+	ModInt(long long u) : x(u) { }
+	ModInt(const ModInt &m) : x(m.x) { }
+	ModInt& operator=(const ModInt &m) { x = m.x; return *this; }
+	friend bool operator==(const ModInt& a, const ModInt& b) { return a.x == b.x; }
+	friend bool operator!=(const ModInt& a, const ModInt& b) { return a.x != b.x; }
+	friend bool operator<(const ModInt& a, const ModInt& b) { return a.x < b.x; }
+
+	ModInt& operator+=(const ModInt& m) { x += m.x; if (x >= MOD) x -= MOD; return *this; }
+	ModInt& operator-=(const ModInt& m) { x -= m.x; if (x < 0) x += MOD; return *this; }
+	ModInt& operator*=(const ModInt& m) { x = (x*m.x)%MOD; return *this; }	
+
+	friend ModInt operator-(const ModInt &a) { ModInt res(a); if (res.x) res.x = MOD-res.x; return res; }
+	friend ModInt operator+(const ModInt& a, const ModInt &b) { return ModInt(a) += ModInt(b); }
+	friend ModInt operator-(const ModInt& a, const ModInt &b) { return ModInt(a) -= ModInt(b); }
+	friend ModInt operator*(const ModInt& a, const ModInt &b) { return ModInt(a) *= ModInt(b); }
+
+	static long long fp(long long u, int k) {
+		if (k == 0) return 1;
+		long long res = fp(u, k/2);
+		res = (res*res) % MOD;
+		if (k & 1) res = (res*u) % MOD;
+		return res;
+	}
+
+	ModInt fastpow(int k) { return ModInt(fp(x, k)); }
+	ModInt inv() { return ModInt(fp(x, MOD-2)); }
+};
+
+template<int M1, int M2>
+struct ModPair {
+	ModInt<M1> x1;
+	ModInt<M2> x2;
+	ModPair() : x1(0), x2(0) { }
+	ModPair(const ModInt<M1> &m1, const ModInt<M2> &m2) : x1(m1), x2(m2) { }
+	ModPair(long long u) : x1(u), x2(u) { }
+	ModPair(long long u1, long long u2) : x1(u1), x2(u2) { }
+
+	friend bool operator==(const ModPair &a, const ModPair &b) { return a.x1 == b.x1 && a.x2 == b.x2; }
+	friend bool operator!=(const ModPair &a, const ModPair &b) { return a.x1 != b.x1 || a.x2 != b.x2; }
+	friend bool operator<(const ModPair &a, const ModPair &b) {
+		if (a.x1 != b.x1) return a.x1 < b.x1;
+		else return a.x2 < b.x2;
+	}
+
+	ModPair& operator+=(const ModPair& m) { x1 += m.x1; x2 += m.x2; return *this; }
+	ModPair& operator-=(const ModPair& m) { x1 -= m.x1; x2 -= m.x2; return *this; }
+	ModPair& operator*=(const ModPair& m) { x1 *= m.x1; x2 *= m.x2; return *this; }
+
+	friend ModPair operator+(const ModPair& a, const ModPair &b) { return ModPair(a) += ModPair(b); }
+	friend ModPair operator-(const ModPair& a, const ModPair &b) { return ModPair(a) -= ModPair(b); }
+	friend ModPair operator*(const ModPair& a, const ModPair &b) { return ModPair(a) *= ModPair(b); }
+
+	ModPair fastpow(int k) { return ModPair(x1.fastpow(k), x2.fastpow(k)); }
+	ModPair inv() { return ModPair(x1.inv(), x2.inv()); }
+};
+using Num = ModPair<999997301, 1000004123>;
+
+$0
+endsnippet
+
+snippet Hash
+const int hashBorne = -50;
+vector<int> listBase {31, 37, 41, 43, 47, 53, 59};
+Num base, invBase;
+Num powBase[hashBorne];
+
+void initHash() {
+	srand(time(NULL));
+	random_shuffle(listBase.begin(), listBase.end());
+	base = Num(listBase[0], listBase[1]);
+	invBase = base.inv();
+	powBase[0] = Num(1);
+	for (int i = 1; i < hashBorne; ++i) {
+		powBase[i] = powBase[i-1] * base;	
+	}
+}
+
+$0
+endsnippet

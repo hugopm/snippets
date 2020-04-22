@@ -1,0 +1,196 @@
+snippet readTree
+for(int iEdge = 0; iEdge < nbNod-1; ++iEdge) {
+	int u, v;
+	cin >> u >> v;
+	--u; --v;
+	adj[u].push_back(v);
+	adj[v].push_back(u);
+}
+
+endsnippet
+
+snippet readGraph
+for(int iEdge = 0; iEdge < nbEdge; ++iEdge) {
+	int u, v;
+	cin >> u >> v;
+	--u; --v;
+	adj[u].push_back(v);
+	adj[v].push_back(u);
+}
+
+endsnippet
+
+snippet readWeighted
+for(int iEdge = 0; iEdge < nbEdge; ++iEdge) {
+	int u, v;
+	long long w;
+	cin >> u >> v >> w;
+	--u; --v;
+	adj[u].emplace_back(v, w);
+	adj[v].emplace_back(u, w);
+}
+
+endsnippet
+
+snippet pbtree
+const int lim = $1;
+int nbNod;
+vector<int> adj[lim];
+
+void dfs(int nod, int par) {
+	for (int enf : adj[nod]) if (enf != par) {
+		dfs(enf, nod);
+	}
+}
+
+void solve() {
+	cin >> nbNod;
+	for (int iEdge = 0; iEdge < nbNod-1; ++iEdge) {
+		int u, v;
+		cin >> u >> v;
+		--u; --v;
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+	dfs(0, -1);
+}
+endsnippet
+
+snippet dijkstra
+vector<long long> dist(nbNod, 1e18);
+priority_queue<pair<long long, int>> pq;
+dist[$1] = 0;
+pq.push({0LL, $1});
+while (!pq.empty()) {
+	int ds = -pq.top().fi, nod = pq.top().se;
+	pq.pop();
+	if (ds != dist[nod]) continue;
+	for (auto edge : adj[nod]) {
+		int neighbour = edge.fi;
+		long long weight = edge.se;
+		if (ds+weight < dist[neighbour]) {
+			dist[neighbour] = ds+weight;
+			pq.push({-dist[neighbour], neighbour});
+		}
+	}
+}$0
+endsnippet
+
+snippet bfs
+vector<int> dist(nbNod, 1e9);
+queue<int> qq;
+dist[$1] = 0;
+qq.push($1);
+while (!qq.empty()) {
+	int nod = qq.front();
+	qq.pop();
+	for (int neighbour : adj[nod]) {
+		if (dist[nod]+1 < dist[neighbour]) {
+			dist[neighbour] = dist[nod]+1;
+			qq.push(neighbour);
+		}
+	}
+}$0
+endsnippet
+
+snippet SmallToLarge
+void ${1:dfs}(int nod, int par) {
+	int big = -1;
+	for (int child : adj[nod]) if (child != par) {
+		$1(enf, nod);
+		if (big == -1 || vsz(${2:set}[child]) > vsz($2[big]))
+			big = child;
+	}
+
+	if (big != -1) {
+		$2[nod].swap($2[big]);
+		for (int child : adj[nod]) if (child != par && child != big) {
+			for (auto elem : $2[child]) {
+				$2[nod].insert(elem);
+			}
+		}
+	}
+}
+
+$0
+endsnippet
+
+snippet LCA
+struct LCA {
+	using ll = long long;
+	static const int UNDEF = -1;
+	static const int height = $1; 
+	static const int maxNod = 1 << (height - 1);
+	static_assert(maxNod >= $2);
+
+	int ancester[maxNod][height];
+	ll infoPath[maxNod][height];
+	int depth[maxNod];
+
+	vector<pair<int, ll>> adj[maxNod];
+
+	void addEdge(int u, int v, ll weight) {
+		adj[u].push_back({v, weight});
+		adj[v].push_back({u, weight});
+	}
+
+	void build(int nod, int par = UNDEF, ll wp = 0) {
+		depth[nod] = (par == UNDEF ? 0 : depth[par] + 1);
+		ancester[nod][0] = par;
+		infoPath[nod][0] = wp;
+		for (int level = 1; level < height; ++level) {
+			int tmp = ancester[nod][level-1];
+			if (tmp == UNDEF) {
+				ancester[nod][level] = UNDEF;
+			} else {
+				ancester[nod][level] = ancester[tmp][level-1];
+				infoPath[nod][level] = max(infoPath[nod][level-1], infoPath[tmp][level-1]);
+			}
+		}
+
+		for (auto rawEnf : adj[nod]) if (rawEnf.first != par) {
+			build(rawEnf.first, nod, rawEnf.second);
+		}
+	}
+
+	pair<int, int> lcaAndInfo(int u, int v) {
+		if (depth[u] > depth[v]) {
+			swap(u, v);
+		}
+		ll info = 0;
+		// v is deepest
+		for (int level = height-1; level >= 0; --level) {
+			int anc = ancester[v][level];
+			if (anc != UNDEF && depth[anc] >= depth[u]) {
+				info = max(info, infoPath[v][level]);
+				v = anc;
+			}	
+		}
+		if (u == v) {
+			return {u, info};
+		}
+		// u and v on the same depth
+		for (int level = height-1; level >= 0; --level) {
+			int a1 = ancester[u][level];
+			int a2 = ancester[v][level];
+			if (a1 != UNDEF && a1 == a2) {
+				info = max(info, infoPath[u][level]);
+				info = max(info, infoPath[v][level]);
+				u = a1;
+				v = a2;
+			}
+		}
+		info = max(info, infoPath[u][0]);
+		info = max(info, infoPath[v][0]);
+		return { ancester[u][0], info };
+
+	} 
+
+	int getLca(int u, int v) {
+		return lcaAndInfo(u,v).first;
+	}
+};
+// DON'T FORGET TO BUILD
+
+$0
+endsnippet

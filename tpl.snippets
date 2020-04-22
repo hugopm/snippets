@@ -1,0 +1,108 @@
+snippet tpl
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <vector>
+using namespace std;
+using ll = long long;
+$1
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	$0
+
+	return 0;
+}
+endsnippet
+
+snippet tpl2 
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <vector>
+using namespace std;
+using ll = long long;
+$2
+
+bool solve() {
+	$0
+	return true;
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	if (!solve()) {
+		cout << "$1" << "\n";
+	}
+	return 0;
+}
+endsnippet
+
+snippet mt
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <vector>
+using namespace std;
+using ll = long long;
+$1
+
+void solve() {
+	$0
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int nbTests;
+	cin >> nbTests;
+	for (int iTest = 0; iTest < nbTests; ++iTest) {
+		solve();
+	}
+
+	return 0;
+}
+endsnippet
+
+snippet mt2
+#include <algorithm>
+#include <cassert>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <vector>
+using namespace std;
+using ll = long long;
+$2
+
+bool solve() {
+	$0
+
+	return true;
+}
+
+signed main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int nbTests;
+	cin >> nbTests;
+	for (int iTest = 0; iTest < nbTests; ++iTest) {
+		if (!solve()) {
+			cout << "$1" << "\n";
+		}
+	}
+
+	return 0;
+}
+endsnippet
