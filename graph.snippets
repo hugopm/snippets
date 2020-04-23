@@ -23,7 +23,7 @@ endsnippet
 snippet readWeighted
 for(int iEdge = 0; iEdge < nbEdge; ++iEdge) {
 	int u, v;
-	long long w;
+	ll w;
 	cin >> u >> v >> w;
 	--u; --v;
 	adj[u].emplace_back(v, w);
@@ -57,17 +57,17 @@ void solve() {
 endsnippet
 
 snippet dijkstra
-vector<long long> dist(nbNod, 1e18);
-priority_queue<pair<long long, int>> pq;
+vector<ll> dist(nbNod, 1e18);
+priority_queue<pair<ll, int>> pq;
 dist[$1] = 0;
 pq.push({0LL, $1});
 while (!pq.empty()) {
-	int ds = -pq.top().fi, nod = pq.top().se;
+	int ds = -pq.top().first, nod = pq.top().second;
 	pq.pop();
 	if (ds != dist[nod]) continue;
 	for (auto edge : adj[nod]) {
 		int neighbour = edge.fi;
-		long long weight = edge.se;
+		ll weight = edge.se;
 		if (ds+weight < dist[neighbour]) {
 			dist[neighbour] = ds+weight;
 			pq.push({-dist[neighbour], neighbour});
@@ -117,24 +117,24 @@ endsnippet
 
 snippet LCA
 struct LCA {
-	using ll = long long;
+	using DT = long long;
 	static const int UNDEF = -1;
 	static const int height = $1; 
 	static const int maxNod = 1 << (height - 1);
 	static_assert(maxNod >= $2);
 
 	int ancester[maxNod][height];
-	ll infoPath[maxNod][height];
+	DT infoPath[maxNod][height];
 	int depth[maxNod];
 
-	vector<pair<int, ll>> adj[maxNod];
+	vector<pair<int, DT>> adj[maxNod];
 
-	void addEdge(int u, int v, ll weight) {
+	void addEdge(int u, int v, DT weight) {
 		adj[u].push_back({v, weight});
 		adj[v].push_back({u, weight});
 	}
 
-	void build(int nod, int par = UNDEF, ll wp = 0) {
+	void build(int nod, int par = UNDEF, DT wp = 0) {
 		depth[nod] = (par == UNDEF ? 0 : depth[par] + 1);
 		ancester[nod][0] = par;
 		infoPath[nod][0] = wp;
@@ -153,11 +153,11 @@ struct LCA {
 		}
 	}
 
-	pair<int, int> lcaAndInfo(int u, int v) {
+	pair<int, DT> lcaAndInfo(int u, int v) {
 		if (depth[u] > depth[v]) {
 			swap(u, v);
 		}
-		ll info = 0;
+		DT info = 0;
 		// v is deepest
 		for (int level = height-1; level >= 0; --level) {
 			int anc = ancester[v][level];
@@ -173,7 +173,7 @@ struct LCA {
 		for (int level = height-1; level >= 0; --level) {
 			int a1 = ancester[u][level];
 			int a2 = ancester[v][level];
-			if (a1 != UNDEF && a1 == a2) {
+			if (a1 != UNDEF && a2 != UNDEF && a1 != a2) {
 				info = max(info, infoPath[u][level]);
 				info = max(info, infoPath[v][level]);
 				u = a1;
