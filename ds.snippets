@@ -1,7 +1,6 @@
 snippet Segtree 
 struct Segtree {
 	using DT = long long;
-	inline DT comb(DT a, DT b) { return $1; }
 	int nbElem = 0;
 	vector<DT> arr;
 
@@ -11,7 +10,7 @@ struct Segtree {
 		for (int i = nbElem; i < 2*nbElem; ++i)
 			arr[i] = v[i-nbElem];
 		for (int i = nbElem-1; i >= 1; --i)
-			arr[i] = comb(arr[2*i], arr[2*i+1]);
+			arr[i] = ${1:max}(arr[2*i], arr[2*i+1]);
 	}
 
 	Segtree(int t, DT x) : Segtree(vector<DT>(t, x)) { }
@@ -20,7 +19,7 @@ struct Segtree {
 		pos += nbElem; arr[pos] = val;
 		while (pos > 1) {
 			pos /= 2;
-			arr[pos] = comb(arr[2*pos], arr[2*pos+1]);
+			arr[pos] = $1(arr[2*pos], arr[2*pos+1]);
 		}
 	}
 
@@ -34,9 +33,9 @@ struct Segtree {
 		DT res = arr[lo];
 		while (lo < ri) {
 			if (lo & 1)
-				res = comb(res, arr[lo++]);
+				res = $1(res, arr[lo++]);
 			if (ri & 1)
-				res = comb(res, arr[--ri]);
+				res = $1(res, arr[--ri]);
 			lo /= 2; ri /= 2;	
 		}
 		return res;
@@ -163,11 +162,17 @@ endsnippet
 snippet AddMax
 struct AddMax {
 	using DT = long long;
-	const static int height = $1;
-	const static int nbElem = 1 << height;
-	static_assert(nbElem > $2);
-	DT arr[2*nbElem+1];
-	DT delay[nbElem+1];
+	int height, nbElem;
+	vector<DT> arr, delay;
+
+	AddMax(int ta) : height(1), nbElem(2) {
+		while (nbElem < ta) {
+			nbElem *= 2;
+			++height;
+		}
+		arr.assign(2*nbElem, 0);
+		delay.assign(nbElem, 0);
+	}
  
 	inline void apply(int nod, DT val) {
 		arr[nod] += val;
