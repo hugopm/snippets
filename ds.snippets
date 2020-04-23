@@ -231,3 +231,80 @@ struct AddMax {
 
 $0
 endsnippet
+
+snippet AddSum
+struct AddSum {
+	using DT = long long;
+	int height, nbElem;
+	vector<DT> arr, delay;
+	vector<int> cov;
+
+	AddSum(int ta) : height(1), nbElem(2) {
+		while (nbElem < ta) {
+			nbElem *= 2;
+			++height;
+		}
+		arr.assign(2*nbElem, 0);
+		delay.assign(nbElem, 0);
+		cov.assign(2*nbElem, 1);
+		for (int i = nbElem-1; i >= 1; --i) {
+			cov[i] = 2*cov[2*i];	
+		}
+	}
+ 
+	inline void apply(int nod, DT val) {
+		arr[nod] += cov[nod]*val;
+		if (nod < nbElem)
+			delay[nod] += val;
+	}
+ 
+	void build(int nod) {
+		while (nod > 1) {
+			nod /= 2;
+			arr[nod] = arr[2*nod] + arr[2*nod+1] + cov[nod] * delay[nod];
+		}
+	}
+ 
+	void push(int leaf) {
+		for (int lvl = height; lvl > 0; --lvl) {
+			int nod = leaf >> lvl; 
+			if (delay[nod] != 0) {
+				apply(2*nod, delay[nod]);
+				apply(2*nod+1, delay[nod]);
+				delay[nod] = 0;
+			}
+		}
+	}
+ 
+	void add(int lo, int ri, DT delta) {
+		lo += nbElem;
+		ri += nbElem+1;
+		int l0 = lo, r0 = ri;
+		while (lo < ri) {
+			if (lo & 1)
+				apply(lo++, delta);
+			if (ri & 1)
+				apply(--ri, delta);
+			lo /= 2; ri /= 2;
+		}
+		build(l0);
+		build(r0-1);
+	}
+ 
+	DT get(int lo, int ri) {
+		lo += nbElem;
+		ri += nbElem+1;
+		push(lo); push(ri-1);
+		DT res = 0;
+		while (lo < ri) {
+			if (lo & 1)
+				res += arr[lo++];
+			if (ri & 1)
+				res += arr[--ri];
+			lo /= 2; ri /= 2;
+		}
+		return res;
+	}
+};
+
+endsnippet
