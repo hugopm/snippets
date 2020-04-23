@@ -8,8 +8,7 @@ snippet tpl
 using namespace std;
 using ll = long long;
 $1
-
-signed main() {
+int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 
@@ -29,13 +28,12 @@ snippet tpl2
 using namespace std;
 using ll = long long;
 $2
-
 bool solve() {
 	$0
 	return true;
 }
 
-signed main() {
+int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 	if (!solve()) {
@@ -55,12 +53,11 @@ snippet mt
 using namespace std;
 using ll = long long;
 $1
-
 void solve() {
 	$0
 }
 
-signed main() {
+int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 
@@ -84,14 +81,13 @@ snippet mt2
 using namespace std;
 using ll = long long;
 $2
-
 bool solve() {
 	$0
 
 	return true;
 }
 
-signed main() {
+int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 
@@ -99,7 +95,7 @@ signed main() {
 	cin >> nbTests;
 	for (int iTest = 0; iTest < nbTests; ++iTest) {
 		if (!solve()) {
-			cout << "$1" << "\n";
+			cout << "$1\n";
 		}
 	}
 
