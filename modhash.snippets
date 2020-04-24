@@ -2,6 +2,7 @@ snippet ModInt
 template<const int MOD>
 struct ModInt
 {
+	//int x;
 	long long x;
 	ModInt() : x(0) { }
 	//ModInt(long long u) : x(u) { if (x >= MOD || x < 0) { x %= MOD; if (x < 0) x += MOD; } } 
@@ -14,22 +15,25 @@ struct ModInt
 
 	ModInt& operator+=(const ModInt& m) { x += m.x; if (x >= MOD) x -= MOD; return *this; }
 	ModInt& operator-=(const ModInt& m) { x -= m.x; if (x < 0) x += MOD; return *this; }
-	ModInt& operator*=(const ModInt& m) { x = (x*m.x)%MOD; return *this; }	
+	ModInt& operator*=(const ModInt& m) { x = (1ll*x*m.x)%MOD; return *this; }	
 
 	friend ModInt operator-(const ModInt &a) { ModInt res(a); if (res.x) res.x = MOD-res.x; return res; }
 	friend ModInt operator+(const ModInt& a, const ModInt &b) { return ModInt(a) += ModInt(b); }
 	friend ModInt operator-(const ModInt& a, const ModInt &b) { return ModInt(a) -= ModInt(b); }
 	friend ModInt operator*(const ModInt& a, const ModInt &b) { return ModInt(a) *= ModInt(b); }
+	ModInt f2() { return ModInt(x) += ModInt(x); }
 
-	static long long fp(long long u, int k) {
-		if (k == 0) return 1;
-		long long res = fp(u, k/2);
-		res = (res*res) % MOD;
-		if (k & 1) res = (res*u) % MOD;
+	static long long fp(long long u, long long k) {
+		long long res = 1;
+		while (k > 0) {
+			if (k & 1)
+				res = (res*u) % MOD;
+			u = (u*u) % MOD;
+			k /= 2;
+		}
 		return res;
 	}
-
-	ModInt fastpow(int k) { return ModInt(fp(x, k)); }
+	ModInt fastpow(long long k) { return ModInt(fp(x, k)); }
 	ModInt inv() { return ModInt(fp(x, MOD-2)); }
 };
 
@@ -51,39 +55,6 @@ $0
 endsnippet
 
 snippet ModPair
-template<const int MOD>
-struct ModInt {
-	long long x;
-	ModInt() : x(0) { }
-	//ModInt(long long u) : x(u) { if (x >= MOD || x < 0) { x %= MOD; if (x < 0) x += MOD; } } 
-	ModInt(long long u) : x(u) { }
-	ModInt(const ModInt &m) : x(m.x) { }
-	ModInt& operator=(const ModInt &m) { x = m.x; return *this; }
-	friend bool operator==(const ModInt& a, const ModInt& b) { return a.x == b.x; }
-	friend bool operator!=(const ModInt& a, const ModInt& b) { return a.x != b.x; }
-	friend bool operator<(const ModInt& a, const ModInt& b) { return a.x < b.x; }
-
-	ModInt& operator+=(const ModInt& m) { x += m.x; if (x >= MOD) x -= MOD; return *this; }
-	ModInt& operator-=(const ModInt& m) { x -= m.x; if (x < 0) x += MOD; return *this; }
-	ModInt& operator*=(const ModInt& m) { x = (x*m.x)%MOD; return *this; }	
-
-	friend ModInt operator-(const ModInt &a) { ModInt res(a); if (res.x) res.x = MOD-res.x; return res; }
-	friend ModInt operator+(const ModInt& a, const ModInt &b) { return ModInt(a) += ModInt(b); }
-	friend ModInt operator-(const ModInt& a, const ModInt &b) { return ModInt(a) -= ModInt(b); }
-	friend ModInt operator*(const ModInt& a, const ModInt &b) { return ModInt(a) *= ModInt(b); }
-
-	static long long fp(long long u, int k) {
-		if (k == 0) return 1;
-		long long res = fp(u, k/2);
-		res = (res*res) % MOD;
-		if (k & 1) res = (res*u) % MOD;
-		return res;
-	}
-
-	ModInt fastpow(int k) { return ModInt(fp(x, k)); }
-	ModInt inv() { return ModInt(fp(x, MOD-2)); }
-};
-
 template<int M1, int M2>
 struct ModPair {
 	ModInt<M1> x1;
