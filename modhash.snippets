@@ -35,6 +35,7 @@ struct ModInt
 	}
 	ModInt fastpow(long long k) { return ModInt(fp(x, k)); }
 	ModInt inv() { return ModInt(fp(x, MOD-2)); }
+	static ModInt sign(long long k) { return ((k & 1) ? ModInt(MOD-1) : ModInt(1)); }
 };
 
 $0
