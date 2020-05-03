@@ -5,8 +5,8 @@ struct ModInt
 	//int x;
 	long long x;
 	ModInt() : x(0) { }
-	//ModInt(long long u) : x(u) { if (x >= MOD || x < 0) { x %= MOD; if (x < 0) x += MOD; } } 
-	ModInt(long long u) : x(u) { }
+	ModInt(long long u) : x(u) { if (x >= MOD || x < 0) { x %= MOD; if (x < 0) x += MOD; } } 
+	//ModInt(long long u) : x(u) { }
 	ModInt(const ModInt &m) : x(m.x) { }
 	ModInt& operator=(const ModInt &m) { x = m.x; return *this; }
 	friend bool operator==(const ModInt& a, const ModInt& b) { return a.x == b.x; }
