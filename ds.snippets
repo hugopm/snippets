@@ -30,7 +30,7 @@ struct Segtree {
 	DT get(int lo, int ri) {
 		lo += nbElem;
 		ri += nbElem+1;
-		DT res = arr[lo];
+		DT res = ${2:arr[lo]}; // maybe 0 ?
 		while (lo < ri) {
 			if (lo & 1)
 				res = $1(res, arr[lo++]);
