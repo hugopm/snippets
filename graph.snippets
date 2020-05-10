@@ -145,7 +145,7 @@ struct LCA {
 				ancester[nod][level] = UNDEF;
 			} else {
 				ancester[nod][level] = ancester[tmp][level-1];
-				infoPath[nod][level] = max(infoPath[nod][level-1], infoPath[tmp][level-1]);
+				infoPath[nod][level] = $3(infoPath[nod][level-1], infoPath[tmp][level-1]);
 			}
 		}
 
@@ -158,12 +158,12 @@ struct LCA {
 		if (depth[u] > depth[v]) {
 			swap(u, v);
 		}
-		DT info = 0;
+		DT info = $4; // BE CAREFUL
 		// v is deepest
 		for (int level = height-1; level >= 0; --level) {
 			int anc = ancester[v][level];
 			if (anc != UNDEF && depth[anc] >= depth[u]) {
-				info = max(info, infoPath[v][level]);
+				info = $3(info, infoPath[v][level]);
 				v = anc;
 			}	
 		}
@@ -175,14 +175,14 @@ struct LCA {
 			int a1 = ancester[u][level];
 			int a2 = ancester[v][level];
 			if (a1 != UNDEF && a2 != UNDEF && a1 != a2) {
-				info = max(info, infoPath[u][level]);
-				info = max(info, infoPath[v][level]);
+				info = $3(info, infoPath[u][level]);
+				info = $3(info, infoPath[v][level]);
 				u = a1;
 				v = a2;
 			}
 		}
-		info = max(info, infoPath[u][0]);
-		info = max(info, infoPath[v][0]);
+		info = $3(info, infoPath[u][0]);
+		info = $3(info, infoPath[v][0]);
 		return { ancester[u][0], info };
 
 	} 
