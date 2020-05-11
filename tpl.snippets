@@ -1,7 +1,6 @@
 snippet tpl
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -11,17 +10,13 @@ $1
 int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
-
 	$0
-
-	return 0;
 }
 endsnippet
 
 snippet tpl2 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -37,16 +32,39 @@ int main() {
 	ios::sync_with_stdio(false);
 	cin.tie(0);
 	if (!solve()) {
-		cout << "$1" << "\n";
+		cout << "${1:NO}\n";
 	}
-	return 0;
+}
+endsnippet
+
+snippet tpl3
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <numeric>
+#include <vector>
+using namespace std;
+using ll = long long;
+$2
+bool solve() {
+	$0
+	return true;
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	if (!solve()) {
+		cout << "${1:NO}\n";
+	} else {
+		cout << "${2:YES}\n";
+	}
 }
 endsnippet
 
 snippet mt
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -66,15 +84,12 @@ int main() {
 	for (int iTest = 0; iTest < nbTests; ++iTest) {
 		solve();
 	}
-
-	return 0;
 }
 endsnippet
 
 snippet mt2
 #include <algorithm>
 #include <cassert>
-#include <cmath>
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -83,7 +98,6 @@ using ll = long long;
 $2
 bool solve() {
 	$0
-
 	return true;
 }
 
@@ -95,7 +109,39 @@ int main() {
 	cin >> nbTests;
 	for (int iTest = 0; iTest < nbTests; ++iTest) {
 		if (!solve()) {
-			cout << "$1\n";
+			cout << "${1:NO}\n";
+		}
+	}
+
+	return 0;
+}
+endsnippet
+
+snippet mt3
+#include <algorithm>
+#include <cassert>
+#include <iostream>
+#include <numeric>
+#include <vector>
+using namespace std;
+using ll = long long;
+$2
+bool solve() {
+	$0
+	return true;
+}
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int nbTests;
+	cin >> nbTests;
+	for (int iTest = 0; iTest < nbTests; ++iTest) {
+		if (!solve()) {
+			cout << "${1:NO}\n";
+		} else {
+			cout << "${2:YES}\n";
 		}
 	}
 
