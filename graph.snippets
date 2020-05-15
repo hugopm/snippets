@@ -1,5 +1,5 @@
 snippet readTree
-for(int iEdge = 0; iEdge < nbNod-1; ++iEdge) {
+for (int iEdge = 0; iEdge < nbNode-1; ++iEdge) {
 	int u, v;
 	cin >> u >> v;
 	--u; --v;
@@ -10,7 +10,7 @@ for(int iEdge = 0; iEdge < nbNod-1; ++iEdge) {
 endsnippet
 
 snippet readGraph
-for(int iEdge = 0; iEdge < nbEdge; ++iEdge) {
+for (int iEdge = 0; iEdge < nbEdge; ++iEdge) {
 	int u, v;
 	cin >> u >> v;
 	--u; --v;
@@ -21,7 +21,7 @@ for(int iEdge = 0; iEdge < nbEdge; ++iEdge) {
 endsnippet
 
 snippet readWeighted
-for(int iEdge = 0; iEdge < nbEdge; ++iEdge) {
+for (int iEdge = 0; iEdge < nbEdge; ++iEdge) {
 	int u, v;
 	ll w;
 	cin >> u >> v >> w;
@@ -34,18 +34,18 @@ endsnippet
 
 snippet pbtree
 const int lim = $1;
-int nbNod;
+int nbNode;
 vector<int> adj[lim];
 
-void dfs(int nod, int par) {
-	for (int enf : adj[nod]) if (enf != par) {
-		dfs(enf, nod);
+void dfs(int node, int par) {
+	for (int enf : adj[node]) if (enf != par) {
+		dfs(enf, node);
 	}
 }
 
 void solve() {
-	cin >> nbNod;
-	for (int iEdge = 0; iEdge < nbNod-1; ++iEdge) {
+	cin >> nbNode;
+	for (int iEdge = 0; iEdge < nbNode-1; ++iEdge) {
 		int u, v;
 		cin >> u >> v;
 		--u; --v;
@@ -57,16 +57,16 @@ void solve() {
 endsnippet
 
 snippet dijkstra
-vector<ll> dist(nbNod, 1e18);
+vector<ll> dist(nbNode, 1e18);
 priority_queue<pair<ll, int>> pq;
 dist[$1] = 0;
 pq.push({0LL, $1});
 while (!pq.empty()) {
 	ll ds = -pq.top().first;
-	int nod = pq.top().second;
+	int node = pq.top().second;
 	pq.pop();
-	if (ds != dist[nod]) continue;
-	for (auto edge : adj[nod]) {
+	if (ds != dist[node]) continue;
+	for (auto edge : adj[node]) {
 		int neighbour = edge.fi;
 		ll weight = edge.se;
 		if (ds+weight < dist[neighbour]) {
@@ -78,16 +78,16 @@ while (!pq.empty()) {
 endsnippet
 
 snippet bfs
-vector<int> dist(nbNod, 1e9);
+vector<int> dist(nbNode, 1e9);
 queue<int> qq;
 dist[$1] = 0;
 qq.push($1);
 while (!qq.empty()) {
-	int nod = qq.front();
+	int node = qq.front();
 	qq.pop();
-	for (int neighbour : adj[nod]) {
-		if (dist[nod]+1 < dist[neighbour]) {
-			dist[neighbour] = dist[nod]+1;
+	for (int neighbour : adj[node]) {
+		if (dist[node]+1 < dist[neighbour]) {
+			dist[neighbour] = dist[node]+1;
 			qq.push(neighbour);
 		}
 	}
@@ -95,19 +95,19 @@ while (!qq.empty()) {
 endsnippet
 
 snippet SmallToLarge
-void ${1:dfs}(int nod, int par) {
+void ${1:dfs}(int node, int par) {
 	int big = -1;
-	for (int child : adj[nod]) if (child != par) {
-		$1(enf, nod);
+	for (int child : adj[node]) if (child != par) {
+		$1(enf, node);
 		if (big == -1 || vsz(${2:set}[child]) > vsz($2[big]))
 			big = child;
 	}
 
 	if (big != -1) {
-		$2[nod].swap($2[big]);
-		for (int child : adj[nod]) if (child != par && child != big) {
+		$2[node].swap($2[big]);
+		for (int child : adj[node]) if (child != par && child != big) {
 			for (auto elem : $2[child]) {
-				$2[nod].insert(elem);
+				$2[node].insert(elem);
 			}
 		}
 	}
@@ -121,36 +121,36 @@ struct LCA {
 	using DT = long long;
 	static const int UNDEF = -1;
 	static const int height = $1; 
-	static const int maxNod = 1 << (height - 1);
-	static_assert(maxNod >= $2);
+	static const int maxNode = 1 << (height - 1);
+	static_assert(maxNode >= $2);
 
-	int ancester[maxNod][height];
-	DT infoPath[maxNod][height];
-	int depth[maxNod];
+	int ancester[maxNode][height];
+	DT infoPath[maxNode][height];
+	int depth[maxNode];
 
-	vector<pair<int, DT>> adj[maxNod];
+	vector<pair<int, DT>> adj[maxNode];
 
 	void addEdge(int u, int v, DT weight) {
 		adj[u].push_back({v, weight});
 		adj[v].push_back({u, weight});
 	}
 
-	void build(int nod, int par = UNDEF, DT wp = 0) {
-		depth[nod] = (par == UNDEF ? 0 : depth[par] + 1);
-		ancester[nod][0] = par;
-		infoPath[nod][0] = wp;
+	void build(int node, int par = UNDEF, DT wp = 0) {
+		depth[node] = (par == UNDEF ? 0 : depth[par] + 1);
+		ancester[node][0] = par;
+		infoPath[node][0] = wp;
 		for (int level = 1; level < height; ++level) {
-			int tmp = ancester[nod][level-1];
+			int tmp = ancester[node][level-1];
 			if (tmp == UNDEF) {
-				ancester[nod][level] = UNDEF;
+				ancester[node][level] = UNDEF;
 			} else {
-				ancester[nod][level] = ancester[tmp][level-1];
-				infoPath[nod][level] = $3(infoPath[nod][level-1], infoPath[tmp][level-1]);
+				ancester[node][level] = ancester[tmp][level-1];
+				infoPath[node][level] = $3(infoPath[node][level-1], infoPath[tmp][level-1]);
 			}
 		}
 
-		for (auto rawEnf : adj[nod]) if (rawEnf.first != par) {
-			build(rawEnf.first, nod, rawEnf.second);
+		for (auto rawEnf : adj[node]) if (rawEnf.first != par) {
+			build(rawEnf.first, node, rawEnf.second);
 		}
 	}
 
