@@ -1,0 +1,142 @@
+snippet Segtree
+template<typename Node>
+struct Segtree {
+	int nbElem = 0;
+	vector<Node> arr;
+
+	Segtree(vector<Node> v) {
+		nbElem = v.size();
+		arr.resize(2*nbElem);
+		for (int i = nbElem; i < 2*nbElem; ++i)
+			arr[i] = v[i-nbElem];
+		for (int i = nbElem-1; i >= 1; --i)
+			arr[i] = arr[2*i].comb(arr[2*i+1]);
+	}
+
+	Segtree(int t, Node x) : Segtree(vector<Node>(t, x)) { }
+
+	void upd(int pos, Node val) {
+		pos += nbElem; arr[pos] = val;
+		while (pos > 1) {
+			pos /= 2;
+			arr[pos] = arr[2*pos].comb(arr[2*pos+1]);
+		}
+	}
+
+	void refresh(int pos, Node refr) {
+		upd(pos, arr[pos+nbElem].comb(refr));
+	}
+
+	void add(int pos, ll delta) {
+		upd(pos, arr[pos+nbElem].value+delta);
+	}
+
+	Node get(int lo, int ri) {
+		lo += nbElem;
+		ri += nbElem+1;
+		Node res; 
+		while (lo < ri) {
+			if (lo & 1)
+				res = res.comb(arr[lo++]);
+			if (ri & 1)
+				res = res.comb(arr[--ri]);
+			lo /= 2; ri /= 2;	
+		}
+		return res;
+	}
+};
+
+$0
+endsnippet
+
+snippet Node
+struct ${1:Node} {
+	${2:datatype} value;
+	$1() : value(${3:beCareful}) {}
+	$1($2 x) : value(x) {} 
+	operator $2() { return value; }
+	Min32 comb(const Min32 &oth) {
+		return ${4:OP}; 
+	}
+};
+$0
+endsnippet
+
+snippet Min32
+struct Min32 {
+	int value;
+	Min32() : value(1e9) {}
+	Min32(int x) : value(x) {} 
+	operator int() { return value; }
+	Min32 comb(const Min32 &oth) {
+		return min(value, oth.value); 
+	}
+};
+$0
+endsnippet
+
+snippet Max32
+struct Max32 {
+	int value;
+	Max32() : value(-1e9) {}
+	Max32(int x) : value(x) {} 
+	operator int() { return value; }
+	Max32 comb(const Max32 &oth) {
+		return max(value, oth.value); 
+	}
+};
+$0
+endsnippet
+
+snippet Sum32
+struct Sum32 {
+	int value;
+	Sum32() : value(0) {}
+	Sum32(int x) : value(x) {} 
+	operator int() { return value; }
+	Sum32 comb(const Sum32 &oth) {
+		return value + oth.value; 
+	}
+};
+$0
+endsnippet
+
+
+snippet Min64
+struct Min64 {
+	ll value;
+	Min64() : value(2e18) {}
+	Min64(ll x) : value(x) {} 
+	operator ll() { return value; }
+	Min64 comb(const Min64 &oth) {
+		return min(value, oth.value); 
+	}
+};
+$0
+endsnippet
+
+snippet Max64
+struct Max64 {
+	ll value;
+	Max64() : value(-2e18) {}
+	Max64(ll x) : value(x) {} 
+	operator ll() { return value; }
+	Max64 comb(const Max64 &oth) {
+		return max(value, oth.value); 
+	}
+};
+$0
+endsnippet
+
+snippet Sum64
+struct Sum64 {
+	ll value;
+	Sum64() : value(0) {}
+	Sum64(ll x) : value(x) {} 
+	operator ll() { return value; }
+	Sum64 comb(const Sum64 &oth) {
+		return value + oth.value; 
+	}
+};
+$0
+endsnippet
