@@ -1,0 +1,79 @@
+snippet ri "int"
+int ${1:n}; cin >> $1;
+$0
+endsnippet
+
+snippet rl "long"
+ll $1; cin >> $1;
+$0
+endsnippet
+
+snippet rii "int,int"
+int ${1:n}, ${2:k};
+cin >> $1 >> $2;
+$0
+endsnippet
+
+snippet ril "int,long"
+int ${1:n}; ll ${2:k};
+cin >> $1 >> $2;
+$0
+endsnippet
+
+snippet rli "long,int"
+ll $1; int $2;
+cin >> $1 >> $2;
+$0
+endsnippet
+
+snippet rll "long,long"
+ll $1, ${2:k};
+cin >> $1 >> $2;
+$0
+endsnippet
+
+snippet rivi "int,vecint"
+int ${1:n}; cin >> $1;
+vector<int> ${2:a}($1);
+for (auto &x: $2) cin >> x;
+$0
+endsnippet
+
+snippet riivi "int,int,vecint"
+int ${1:n}, ${2:k};
+cin >> $1 >> $2;
+vector<int> ${3:a}($1);
+for (auto &x: $3) cin >> x;
+$0
+endsnippet
+
+snippet rilvi "int,long,vecint"
+int ${1:n}; ll ${2:k};
+cin >> $1 >> $2;
+vector<int> ${3:a}($1);
+for (auto &x: $3) cin >> x;
+$0
+endsnippet
+
+snippet rivl "int,veclong"
+int ${1:n}; cin >> $1;
+vector<ll> ${2:a}($1);
+for (auto &x: $2) cin >> x;
+$0
+endsnippet
+
+snippet riivl "int,int,veclong"
+int ${1:n}, ${2:k};
+cin >> $1 >> $2;
+vector<ll> ${3:a}($1);
+for (auto &x: $3) cin >> x;
+$0
+endsnippet
+
+snippet rilvl "int,long,veclong"
+int ${1:n}; ll ${2:k};
+cin >> $1 >> $2;
+vector<ll> ${3:a}($1);
+for (auto &x: $3) cin >> x;
+$0
+endsnippet
