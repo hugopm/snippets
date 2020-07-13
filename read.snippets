@@ -35,7 +35,9 @@ endsnippet
 snippet rivi "int,vecint"
 int ${1:n}; cin >> $1;
 vector<int> ${2:a}($1);
-for (auto &x: $2) cin >> x;
+for (int i = 0; i < $1; ++i) {
+	cin >> $2[i];
+}
 $0
 endsnippet
 
@@ -43,7 +45,9 @@ snippet riivi "int,int,vecint"
 int ${1:n}, ${2:k};
 cin >> $1 >> $2;
 vector<int> ${3:a}($1);
-for (auto &x: $3) cin >> x;
+for (int i = 0; i < $1; ++i) {
+	cin >> $3[i];
+}
 $0
 endsnippet
 
@@ -51,14 +55,18 @@ snippet rilvi "int,long,vecint"
 int ${1:n}; ll ${2:k};
 cin >> $1 >> $2;
 vector<int> ${3:a}($1);
-for (auto &x: $3) cin >> x;
+for (int i = 0; i < $1; ++i) {
+	cin >> $3[i];
+}
 $0
 endsnippet
 
 snippet rivl "int,veclong"
 int ${1:n}; cin >> $1;
 vector<ll> ${2:a}($1);
-for (auto &x: $2) cin >> x;
+for (int i = 0; i < $1; ++i) {
+	cin >> $2[i];
+}
 $0
 endsnippet
 
@@ -66,7 +74,9 @@ snippet riivl "int,int,veclong"
 int ${1:n}, ${2:k};
 cin >> $1 >> $2;
 vector<ll> ${3:a}($1);
-for (auto &x: $3) cin >> x;
+for (int i = 0; i < $1; ++i) {
+	cin >> $3[i];
+}
 $0
 endsnippet
 
@@ -74,6 +84,8 @@ snippet rilvl "int,long,veclong"
 int ${1:n}; ll ${2:k};
 cin >> $1 >> $2;
 vector<ll> ${3:a}($1);
-for (auto &x: $3) cin >> x;
+for (int i = 0; i < $1; ++i) {
+	cin >> $3[i];
+}
 $0
 endsnippet
