@@ -76,14 +76,14 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 endsnippet
 
 snippet sieve
-const int limSieve = $1;
-int sieve[limSieve];
+const int lim_sieve = $1;
+int sieve[lim_sieve];
 
 void initSieve() {
-	for (int x = 2; x < limSieve; ++x) {
+	for (int x = 2; x < lim_sieve; ++x) {
 		if (sieve[x] == 0) {
 			sieve[x] = x;
-			for (int c = 2; c*x < limSieve; ++c) {
+			for (int c = 2; c*x < lim_sieve; ++c) {
 				if (sieve[c*x] == 0)
 					sieve[c*x] = x;
 			}

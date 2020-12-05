@@ -1,5 +1,5 @@
-snippet readTree
-for (int iEdge = 0; iEdge < nbNode-1; ++iEdge) {
+snippet read_tree
+for (int id_edge = 0; id_edge < nb_node-1; ++id_edge) {
 	int u, v;
 	cin >> u >> v;
 	--u; --v;
@@ -9,8 +9,8 @@ for (int iEdge = 0; iEdge < nbNode-1; ++iEdge) {
 
 endsnippet
 
-snippet readGraph
-for (int iEdge = 0; iEdge < nbEdge; ++iEdge) {
+snippet read_graph
+for (int id_edge = 0; id_edge < nb_edge; ++id_edge) {
 	int u, v;
 	cin >> u >> v;
 	--u; --v;
@@ -20,8 +20,8 @@ for (int iEdge = 0; iEdge < nbEdge; ++iEdge) {
 
 endsnippet
 
-snippet readWeighted
-for (int iEdge = 0; iEdge < nbEdge; ++iEdge) {
+snippet read_weighted
+for (int id_edge = 0; id_edge < nb_edge; ++id_edge) {
 	int u, v;
 	ll w;
 	cin >> u >> v >> w;
@@ -32,32 +32,8 @@ for (int iEdge = 0; iEdge < nbEdge; ++iEdge) {
 
 endsnippet
 
-snippet pbtree
-const int lim = $1;
-int nbNode;
-vector<int> adj[lim];
-
-void dfs(int node, int par) {
-	for (int enf : adj[node]) if (enf != par) {
-		dfs(enf, node);
-	}
-}
-
-void solve() {
-	cin >> nbNode;
-	for (int iEdge = 0; iEdge < nbNode-1; ++iEdge) {
-		int u, v;
-		cin >> u >> v;
-		--u; --v;
-		adj[u].push_back(v);
-		adj[v].push_back(u);
-	}
-	dfs(0, -1);
-}
-endsnippet
-
 snippet dijkstra
-vector<ll> dist(nbNode, 1e18);
+vector<ll> dist(nb_node, 1e18);
 priority_queue<pair<ll, int>> pq;
 dist[$1] = 0;
 pq.push({0LL, $1});
@@ -78,7 +54,7 @@ while (!pq.empty()) {
 endsnippet
 
 snippet bfs
-vector<int> dist(nbNode, 1e9);
+vector<int> dist(nb_node, 1e9);
 queue<int> qq;
 dist[$1] = 0;
 qq.push($1);
@@ -94,18 +70,18 @@ while (!qq.empty()) {
 }$0
 endsnippet
 
-snippet SmallToLarge
-void ${1:dfs}(int node, int par) {
-	int big = -1;
-	for (int child : adj[node]) if (child != par) {
-		$1(enf, node);
-		if (big == -1 || vsz(${2:set}[child]) > vsz($2[big]))
-			big = child;
+snippet small_to_large 
+void ${1:dfs}(int node, int parent) {
+	int heavy = -1;
+	for (int child : adj[node]) if (child != parent) {
+		$1(child, node);
+		if (heavy == -1 || vsz(${2:set}[child]) > vsz($2[heavy]))
+			heavy = child;
 	}
 
-	if (big != -1) {
-		$2[node].swap($2[big]);
-		for (int child : adj[node]) if (child != par && child != big) {
+	if (heavy != -1) {
+		$2[node].swap($2[heavy]);
+		for (int child : adj[node]) if (child != parent && child != heavy) {
 			for (auto elem : $2[child]) {
 				$2[node].insert(elem);
 			}

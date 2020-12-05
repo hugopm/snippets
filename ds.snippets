@@ -1,20 +1,20 @@
-snippet SegAdd
-struct SegAdd {
+snippet seg_add
+struct seg_add {
 	using DT = long long;
-	int nbElem = 0;
+	int size = 0;
 	vector<DT> arr;
 
-	SegAdd(vector<DT> v) {
-		nbElem = v.size();
-		arr.assign(2*nbElem, 0);
-		for (int i = nbElem; i < 2*nbElem; ++i)
-			arr[i] = v[i-nbElem];
+	seg_add(vector<DT> v) {
+		size = v.size();
+		arr.assign(2*size, 0);
+		for (int i = size; i < 2*size; ++i)
+			arr[i] = v[i-size];
 	}
 
-	SegAdd(int t, DT x) : SegAdd(vector<DT>(t, x)) { }
+	seg_add(int t, DT x) : seg_add(vector<DT>(t, x)) { }
 
 	DT get(int pos) {
-		pos += nbElem;
+		pos += size;
 		DT res = 0;
 		while (pos >= 1) {
 			res += arr[pos];
@@ -24,8 +24,8 @@ struct SegAdd {
 	}
 
 	void add(int lo, int ri, DT delta) {
-		lo += nbElem;
-		ri += nbElem+1;
+		lo += size;
+		ri += size+1;
 		while (lo < ri) {
 			if (lo & 1)
 				arr[lo++] += delta;
@@ -39,61 +39,19 @@ struct SegAdd {
 $0
 endsnippet
 
-snippet SegRetr
-struct SegRetr {
-	using DT = long long;
-	const static int nbElem = $1;
-	pair<DT, int> arr[2*nbElem];
+snippet dsu
+struct dsu {
+	int size;
+	vector<int> leader, weight;
 
-	SegRetr() {
-		for (int i = 0; i < nbElem; ++i)
-			arr[i+nbElem].second = i;
-	}
-
-	void upd(int pos, DT val) {
-		pos += nbElem;
-		arr[pos].first = val;
-		while (pos > 1) {
-			pos /= 2;
-			arr[pos] = max(arr[2*pos], arr[2*pos+1]);
-		}
-	}
-
-	void add(int pos, DT delta) {
-		upd(pos, arr[pos+nbElem].first+delta);
-	}
-
-	int getIndex(int lo, int ri) {
-		lo += nbElem;
-		ri += nbElem+1;
-		auto res = arr[lo];
-		while (lo < ri) {
-			if (lo & 1)
-				res = max(res, arr[lo++]);
-			if (ri & 1)
-				res = max(res, arr[--ri]);
-			lo /= 2; ri /= 2;	
-		}
-		return res.second;
-	}
-};
-
-$0
-endsnippet
-
-snippet DSU
-struct DSU {
-	int nbElem;
-	vector<int> repr, weight;
-
-	DSU(int ta) : nbElem(ta), repr(ta), weight(ta, 1) {
-		iota(repr.begin(), repr.end(), 0);
+	dsu(int ta) : size(ta), leader(ta), weight(ta, 1) {
+		iota(leader.begin(), leader.end(), 0);
 	}
 
 	int get(int x) {
-		if (repr[x] != x)
-			repr[x] = get(repr[x]);
-		return repr[x];
+		if (leader[x] != x)
+			leader[x] = get(leader[x]);
+		return leader[x];
 	}
 
 	bool unite(int a, int b) {
@@ -103,7 +61,7 @@ struct DSU {
 			return false;
 		if (weight[a] < weight[b])
 			swap(a, b);
-		repr[b] = a;
+		leader[b] = a;
 		weight[a] += weight[b];
 		return true;
 	}
@@ -112,34 +70,34 @@ struct DSU {
 $0
 endsnippet
 
-snippet AddMax
-struct AddMax {
+snippet add_max
+struct add_max {
 	using DT = long long;
-	int height, nbElem;
+	int height, size;
 	vector<DT> arr, delay;
 
-	AddMax(int ta) : height(1), nbElem(2) {
-		while (nbElem < ta) {
-			nbElem *= 2;
+	add_max(int ta) : height(1), size(2) {
+		while (size < ta) {
+			size *= 2;
 			++height;
 		}
-		arr.assign(2*nbElem, 0);
-		delay.assign(nbElem, 0);
+		arr.assign(2*size, 0);
+		delay.assign(size, 0);
 	}
- 
+
 	inline void apply(int nod, DT val) {
 		arr[nod] += val;
-		if (nod < nbElem)
+		if (nod < size)
 			delay[nod] += val;
 	}
- 
+
 	void build(int nod) {
 		while (nod > 1) {
 			nod /= 2;
 			arr[nod] = ${3:max}(arr[2*nod], arr[2*nod+1]) + delay[nod];
 		}
 	}
- 
+
 	void push(int leaf) {
 		for (int lvl = height; lvl > 0; --lvl) {
 			int nod = leaf >> lvl; 
@@ -150,10 +108,10 @@ struct AddMax {
 			}
 		}
 	}
- 
+
 	void add(int lo, int ri, DT delta) {
-		lo += nbElem;
-		ri += nbElem+1;
+		lo += size;
+		ri += size+1;
 		int l0 = lo, r0 = ri;
 		while (lo < ri) {
 			if (lo & 1)
@@ -165,10 +123,10 @@ struct AddMax {
 		build(l0);
 		build(r0-1);
 	}
- 
+
 	DT get(int lo, int ri) {
-		lo += nbElem;
-		ri += nbElem+1;
+		lo += size;
+		ri += size+1;
 		push(lo); push(ri-1);
 		DT res = arr[lo];
 		while (lo < ri) {
@@ -185,39 +143,39 @@ struct AddMax {
 $0
 endsnippet
 
-snippet AddSum
-struct AddSum {
+snippet add_sum
+struct add_sum {
 	using DT = long long;
-	int height, nbElem;
+	int height, size;
 	vector<DT> arr, delay;
 	vector<int> cov;
 
-	AddSum(int ta) : height(1), nbElem(2) {
-		while (nbElem < ta) {
-			nbElem *= 2;
+	add_sum(int ta) : height(1), size(2) {
+		while (size < ta) {
+			size *= 2;
 			++height;
 		}
-		arr.assign(2*nbElem, 0);
-		delay.assign(nbElem, 0);
-		cov.assign(2*nbElem, 1);
-		for (int i = nbElem-1; i >= 1; --i) {
+		arr.assign(2*size, 0);
+		delay.assign(size, 0);
+		cov.assign(2*size, 1);
+		for (int i = size-1; i >= 1; --i) {
 			cov[i] = 2*cov[2*i];	
 		}
 	}
- 
+
 	inline void apply(int nod, DT val) {
 		arr[nod] += cov[nod]*val;
-		if (nod < nbElem)
+		if (nod < size)
 			delay[nod] += val;
 	}
- 
+
 	void build(int nod) {
 		while (nod > 1) {
 			nod /= 2;
 			arr[nod] = arr[2*nod] + arr[2*nod+1] + cov[nod] * delay[nod];
 		}
 	}
- 
+
 	void push(int leaf) {
 		for (int lvl = height; lvl > 0; --lvl) {
 			int nod = leaf >> lvl; 
@@ -228,10 +186,10 @@ struct AddSum {
 			}
 		}
 	}
- 
+
 	void add(int lo, int ri, DT delta) {
-		lo += nbElem;
-		ri += nbElem+1;
+		lo += size;
+		ri += size+1;
 		int l0 = lo, r0 = ri;
 		while (lo < ri) {
 			if (lo & 1)
@@ -243,10 +201,10 @@ struct AddSum {
 		build(l0);
 		build(r0-1);
 	}
- 
+
 	DT get(int lo, int ri) {
-		lo += nbElem;
-		ri += nbElem+1;
+		lo += size;
+		ri += size+1;
 		push(lo); push(ri-1);
 		DT res = 0;
 		while (lo < ri) {

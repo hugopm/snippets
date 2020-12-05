@@ -1,40 +1,40 @@
-snippet Segtree
-template<typename Node>
-struct Segtree {
-	int nbElem = 0;
-	vector<Node> arr;
+snippet segment_tree
+template<typename st_node>
+struct segment_tree {
+	int size = 0;
+	vector<st_node> arr;
 
-	Segtree(vector<Node> v) {
-		nbElem = v.size();
-		arr.resize(2*nbElem);
-		for (int i = nbElem; i < 2*nbElem; ++i)
-			arr[i] = v[i-nbElem];
-		for (int i = nbElem-1; i >= 1; --i)
+	segment_tree(vector<st_node> v) {
+		size = v.size();
+		arr.resize(2*size);
+		for (int i = size; i < 2*size; ++i)
+			arr[i] = v[i-size];
+		for (int i = size-1; i >= 1; --i)
 			arr[i] = arr[2*i].comb(arr[2*i+1]);
 	}
 
-	Segtree(int t, Node x) : Segtree(vector<Node>(t, x)) { }
+	segment_tree(int t, st_node x) : segment_tree(vector<st_node>(t, x)) { }
 
-	void upd(int pos, Node val) {
-		pos += nbElem; arr[pos] = val;
+	void upd(int pos, st_node val) {
+		pos += size; arr[pos] = val;
 		while (pos > 1) {
 			pos /= 2;
 			arr[pos] = arr[2*pos].comb(arr[2*pos+1]);
 		}
 	}
 
-	void refresh(int pos, Node refr) {
-		upd(pos, arr[pos+nbElem].comb(refr));
+	void refresh(int pos, st_node refr) {
+		upd(pos, arr[pos+size].comb(refr));
 	}
 
 	void add(int pos, ll delta) {
-		upd(pos, arr[pos+nbElem].value+delta);
+		upd(pos, arr[pos+size].value+delta);
 	}
 
-	Node get(int lo, int ri) {
-		lo += nbElem;
-		ri += nbElem+1;
-		Node res; 
+	st_node get(int lo, int ri) {
+		lo += size;
+		ri += size+1;
+		st_node res; 
 		while (lo < ri) {
 			if (lo & 1)
 				res = res.comb(arr[lo++]);
@@ -49,52 +49,52 @@ struct Segtree {
 $0
 endsnippet
 
-snippet Node
-struct ${1:Node} {
+snippet st_node
+struct ${1:st_node} {
 	${2:datatype} value;
-	$1() : value(${3:beCareful}) {}
+	$1() : value(${3:be_careful}) {}
 	$1($2 x) : value(x) {} 
 	operator $2() { return value; }
-	Min32 comb(const Min32 &oth) {
+	min32 comb(const min32 &oth) {
 		return ${4:OP}; 
 	}
 };
 $0
 endsnippet
 
-snippet Min32
-struct Min32 {
+snippet min32
+struct min32 {
 	int value;
-	Min32() : value(1e9) {}
-	Min32(int x) : value(x) {} 
+	min32() : value(1e9) {}
+	min32(int x) : value(x) {} 
 	operator int() { return value; }
-	Min32 comb(const Min32 &oth) {
+	min32 comb(const min32 &oth) {
 		return min(value, oth.value); 
 	}
 };
 $0
 endsnippet
 
-snippet Max32
-struct Max32 {
+snippet max32
+struct max32 {
 	int value;
-	Max32() : value(-1e9) {}
-	Max32(int x) : value(x) {} 
+	max32() : value(-1e9) {}
+	max32(int x) : value(x) {} 
 	operator int() { return value; }
-	Max32 comb(const Max32 &oth) {
+	max32 comb(const max32 &oth) {
 		return max(value, oth.value); 
 	}
 };
 $0
 endsnippet
 
-snippet Sum32
-struct Sum32 {
+snippet sum32
+struct sum32 {
 	int value;
-	Sum32() : value(0) {}
-	Sum32(int x) : value(x) {} 
+	sum32() : value(0) {}
+	sum32(int x) : value(x) {} 
 	operator int() { return value; }
-	Sum32 comb(const Sum32 &oth) {
+	sum32 comb(const sum32 &oth) {
 		return value + oth.value; 
 	}
 };
@@ -102,39 +102,39 @@ $0
 endsnippet
 
 
-snippet Min64
-struct Min64 {
+snippet min64
+struct min64 {
 	ll value;
-	Min64() : value(2e18) {}
-	Min64(ll x) : value(x) {} 
+	min64() : value(2e18) {}
+	min64(ll x) : value(x) {} 
 	operator ll() { return value; }
-	Min64 comb(const Min64 &oth) {
+	min64 comb(const min64 &oth) {
 		return min(value, oth.value); 
 	}
 };
 $0
 endsnippet
 
-snippet Max64
-struct Max64 {
+snippet max64
+struct max64 {
 	ll value;
-	Max64() : value(-2e18) {}
-	Max64(ll x) : value(x) {} 
+	max64() : value(-2e18) {}
+	max64(ll x) : value(x) {} 
 	operator ll() { return value; }
-	Max64 comb(const Max64 &oth) {
+	max64 comb(const max64 &oth) {
 		return max(value, oth.value); 
 	}
 };
 $0
 endsnippet
 
-snippet Sum64
-struct Sum64 {
+snippet sum64
+struct sum64 {
 	ll value;
-	Sum64() : value(0) {}
-	Sum64(ll x) : value(x) {} 
+	sum64() : value(0) {}
+	sum64(ll x) : value(x) {} 
 	operator ll() { return value; }
-	Sum64 comb(const Sum64 &oth) {
+	sum64 comb(const sum64 &oth) {
 		return value + oth.value; 
 	}
 };
